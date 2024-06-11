@@ -1,0 +1,118 @@
+CREATE DATABASE db_pruebaintcomex;
+
+use db_pruebaintcomex;
+
+-- Tabla Suppliers
+CREATE TABLE Suppliers (
+    SupplierID INT AUTO_INCREMENT PRIMARY KEY,
+    CompanyName VARCHAR(100),
+    ContactName VARCHAR(100),
+    ContactTitle VARCHAR(100),
+    Address VARCHAR(255),
+    City VARCHAR(100),
+    Region VARCHAR(100),
+    PostalCode VARCHAR(20),
+    Country VARCHAR(100),
+    Phone VARCHAR(50),
+    Fax VARCHAR(50),
+    HomePage TEXT
+);
+
+-- Tabla Categories
+CREATE TABLE Categories (
+    CategoryID INT AUTO_INCREMENT PRIMARY KEY,
+    CategoryName VARCHAR(100) NOT NULL,
+    Description TEXT,
+    Picture BLOB
+);
+
+-- Tabla Customers
+CREATE TABLE Customers (
+    CustomerID INT AUTO_INCREMENT PRIMARY KEY,
+    CompanyName VARCHAR(100) NOT NULL,
+    ContactName VARCHAR(100),
+    ContactTitle VARCHAR(100),
+    Address VARCHAR(255),
+    City VARCHAR(100),
+    Region VARCHAR(100),
+    PostalCode VARCHAR(20),
+    Country VARCHAR(100),
+    Phone VARCHAR(50),
+    Fax VARCHAR(50)
+);
+
+-- Tabla Shippers
+CREATE TABLE Shippers (
+    ShipperID INT AUTO_INCREMENT PRIMARY KEY,
+    CompanyName VARCHAR(100) NOT NULL,
+    Phone VARCHAR(50)
+);
+
+-- Tabla Employees
+CREATE TABLE Employees (
+    EmployeeID INT AUTO_INCREMENT PRIMARY KEY,
+    LastName VARCHAR(100) NOT NULL,
+    FirstName VARCHAR(100) NOT NULL,
+    Title VARCHAR(100),
+    TitleOfCourtesy VARCHAR(50),
+    BirthDay DATE,
+    HireDate DATE,
+    Address VARCHAR(255),
+    City VARCHAR(100),
+    Region VARCHAR(100),
+    PostalCode VARCHAR(20),
+    Country VARCHAR(100),
+    HomePhone VARCHAR(50),
+    Extension VARCHAR(10),
+    Photo BLOB,
+    Notes TEXT,
+    ReportsTo INT
+);
+
+-- Tabla Products
+CREATE TABLE Products (
+    ProductID INT AUTO_INCREMENT PRIMARY KEY,
+    SupplierID INT,
+    CategoryID INT,
+    ProductName VARCHAR(100),
+    QuantityPerUnit VARCHAR(100),
+    UnitPrice DECIMAL(10, 2),
+    UnitsInStock INT,
+    UnitsOnOrder INT,
+    RecorderLevel INT,
+    Discontinued BOOLEAN,
+    FOREIGN KEY (SupplierID) REFERENCES Suppliers(SupplierID),
+    FOREIGN KEY (CategoryID) REFERENCES Categories(CategoryID)
+);
+
+-- Tabla Orders
+CREATE TABLE Orders (
+    OrderID INT AUTO_INCREMENT PRIMARY KEY,
+    CustomerID INT,
+    EmployeeID INT,
+    OrderDate DATE,
+    RequiredDate DATE,
+    ShippedDate DATE,
+    ShipVia INT,
+    Freight DECIMAL(10, 2),
+    ShipName VARCHAR(100),
+    ShipAddress VARCHAR(255),
+    ShipCity VARCHAR(100),
+    ShipRegion VARCHAR(100),
+    ShipPostalCode VARCHAR(20),
+    ShipCountry VARCHAR(100),
+    FOREIGN KEY (CustomerID) REFERENCES Customers(CustomerID),
+    FOREIGN KEY (EmployeeID) REFERENCES Employees(EmployeeID)
+);
+
+-- Tabla Order Details
+CREATE TABLE Order_Details (
+    OrderID INT,
+    ProductID INT,
+    UnitPrice DECIMAL(10, 2),
+    Quantity INT,
+    Discount DECIMAL(3, 2),
+    PRIMARY KEY (OrderID, ProductID),
+    FOREIGN KEY (OrderID) REFERENCES Orders(OrderID),
+    FOREIGN KEY (ProductID) REFERENCES Products(ProductID)
+);
